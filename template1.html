@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>{{ name }} - Resume</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 40px;
+      border: 1px solid #c7d2fe;
+      border-radius: 20px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+    }
+    .photo {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #22d3ee;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 32px;
+      color: #4338ca;
+      margin: 0;
+    }
+    p.contact {
+      color: #4b5563;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    section {
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-size: 20px;
+      color: #0891b2;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #e0f2fe;
+      padding-bottom: 4px;
+    }
+    ul {
+      margin-left: 24px;
+      color: #374151;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    p {
+      color: #374151;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- 🖼 Profile + Contact -->
+    <div class="header">
+      {% if photo %}
+        <img src="{{ url_for('static', filename=photo) }}" alt="Profile Photo" class="photo">
+      {% endif %}
+      <div>
+        <h1>{{ name }}</h1>
+        <p class="contact">{{ email }}{% if phone %} • {{ phone }}{% endif %}</p>
+      </div>
+    </div>
+
+    {% if summary %}
+    <section>
+      <h2>Summary</h2>
+      <p>{{ summary }}</p>
+    </section>
+    {% endif %}
+
+    {% if skills %}
+    <section>
+      <h2>Skills</h2>
+      <ul>
+        {% for s in skills %}
+          <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if educations %}
+    <section>
+      <h2>Education</h2>
+      <ul>
+        {% for e in educations %}
+          <li>{{ e }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if projects %}
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        {% for p in projects %}
+          <li>{{ p }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if experiences %}
+    <section>
+      <h2>Experience</h2>
+      <ul>
+        {% for ex in experiences %}
+          <li>{{ ex }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if certificates %}
+    <section>
+      <h2>Certificates</h2>
+      <ul>
+        {% for c in certificates %}
+          <li>{{ c }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+  </div>
+</body>
+</html>

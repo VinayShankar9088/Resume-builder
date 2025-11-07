@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{ name }} - Resume</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            color: #000;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 800px;
+            margin: 30px auto;
+            padding: 40px;
+            border: 1px solid #000;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        h1 {
+            font-size: 32px;
+            border-bottom: 2px solid #000;
+        }
+
+        h2 {
+            font-size: 24px;
+            border-bottom: 1px solid #000;
+            margin-top: 20px;
+        }
+
+        p, li {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .section {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        .contact {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .summary {
+            font-style: italic;
+        }
+
+        .photo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #000;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if photo %}
+        <img src="{{ url_for('static', filename=photo) }}" alt="Profile Photo" class="photo">
+        {% endif %}
+
+        <h1>{{ name }}</h1>
+        <p class="contact">Email: {{ email }}{% if phone %} | Phone: {{ phone }}{% endif %}</p>
+        
+        {% if summary %}
+        <div class="section summary">
+            <h2>Professional Summary</h2>
+            <p>{{ summary }}</p>
+        </div>
+        {% endif %}
+
+        {% if educations %}
+        <div class="section">
+            <h2>Education</h2>
+            <ul>
+                {% for edu in educations %}
+                <li>{{ edu }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if skills %}
+        <div class="section">
+            <h2>Skills</h2>
+            <ul>
+                {% for skill in skills %}
+                <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if projects %}
+        <div class="section">
+            <h2>Projects</h2>
+            <ul>
+                {% for project in projects %}
+                <li>{{ project }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if experiences %}
+        <div class="section">
+            <h2>Experience</h2>
+            <ul>
+                {% for ex in experiences %}
+                <li>{{ ex }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if certificates %}
+        <div class="section">
+            <h2>Certificates</h2>
+            <ul>
+                {% for cert in certificates %}
+                <li>{{ cert }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-100 via-white to-cyan-100 min-h-screen font-sans">
+  <div class="max-w-7xl mx-auto py-12 px-6 grid md:grid-cols-2 gap-10">
+    
+    <!-- 📝 Resume Form -->
+    <form id="resume-form" action="{{ url_for('generate') }}" method="post" enctype="multipart/form-data"
+      class="bg-white p-8 rounded-3xl shadow-xl space-y-6 border border-indigo-100">
+      
+      <h1 class="text-3xl font-extrabold text-indigo-600 mb-4">Resume Builder</h1>
+
+      <input id="name" class="w-full border border-gray-300 rounded-lg p-3" name="name" placeholder="Full Name" required>
+      <input id="email" class="w-full border border-gray-300 rounded-lg p-3" name="email" placeholder="Email">
+      <input id="phone" class="w-full border border-gray-300 rounded-lg p-3" name="phone" placeholder="Phone">
+
+      <textarea id="summary" class="w-full border border-gray-300 rounded-lg p-3" name="summary" rows="3" placeholder="Summary"></textarea>
+      <textarea id="skills" class="w-full border border-gray-300 rounded-lg p-3" name="skills" rows="3" placeholder="Skills (one per line)"></textarea>
+      <textarea id="education" class="w-full border border-gray-300 rounded-lg p-3" name="education" rows="3" placeholder="Education (one per line)"></textarea>
+      <textarea id="projects" class="w-full border border-gray-300 rounded-lg p-3" name="projects" rows="3" placeholder="Projects (one per line)"></textarea>
+      <textarea id="experience" class="w-full border border-gray-300 rounded-lg p-3" name="experience" rows="3" placeholder="Experience (one per line)"></textarea>
+      <textarea id="certificates" class="w-full border border-gray-300 rounded-lg p-3" name="certificates" rows="3" placeholder="Certificates (one per line)"></textarea>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Profile Photo</label>
+        <input type="file" id="photo" name="photo" accept="image/*" class="w-full border border-gray-300 rounded-lg p-2">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Select Template</label>
+        <select name="template" class="w-full border border-gray-300 rounded-lg p-3">
+          <option value="template1">Elegant</option>
+          <option value="template2">Modern</option>
+          <option value="template3">Classic</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input type="checkbox" name="download" value="pdf" id="download-pdf" class="h-4 w-4 text-indigo-600">
+        <label for="download-pdf" class="text-gray-700">Download as PDF</label>
+      </div>
+
+      <div class="flex justify-end pt-4">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow-md transition">
+          Generate Resume
+        </button>
+      </div>
+    </form>
+
+    <!-- 👀 Live Preview -->
+    <div id="preview" class="bg-white p-8 rounded-3xl shadow-xl border border-cyan-100">
+      <h2 class="text-2xl font-bold text-cyan-600 mb-6">Live Preview</h2>
+      <div id="preview-area" class="text-gray-800 space-y-6"></div>
+    </div>
+  </div>
+
+  <!-- 💡 JavaScript for Live Preview -->
+  <script>
+    const form = document.getElementById('resume-form');
+    const previewArea = document.getElementById('preview-area');
+    const photoInput = document.getElementById('photo');
+
+    function formatList(text) {
+      return text
+        .split(/\n|,/) // handles both line breaks and commas
+        .map(item => item.trim())
+        .filter(Boolean)
+        .map(item => `<li class="ml-6 list-disc">${item}</li>`)
+        .join('');
+    }
+
+    function updatePreview() {
+      const data = new FormData(form);
+      const obj = Object.fromEntries(data.entries());
+
+      let html = `<div class="space-y-4">`;
+
+      if (photoInput.files && photoInput.files[0]) {
+        const url = URL.createObjectURL(photoInput.files[0]);
+        html += `<div class="flex items-center gap-4">
+          <img src="${url}" class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400 shadow-md">
+          <div>`;
+      }
+
+      html += `<h1 class="text-3xl font-bold text-indigo-700">${obj.name || 'Your Name'}</h1>`;
+      html += `<p class="text-gray-600">${obj.email || ''}${obj.phone ? ' • ' + obj.phone : ''}</p>`;
+      if (photoInput.files && photoInput.files[0]) html += `</div></div>`;
+
+      if (obj.summary)
+        html += `<section><h3 class="text-lg font-semibold text-cyan-600">Summary</h3><p>${obj.summary}</p></section>`;
+      if (obj.skills)
+        html += `<section><h3 class="text-lg font-semibold text-cyan-600">Skills</h3><ul>${formatList(obj.skills)}</ul></section>`;
+      if (obj.education)
+        html += `<section><h3 class="text-lg font-semibold text-cyan-600">Education</h3><ul>${formatList(obj.education)}</ul></section>`;
+      if (obj.projects)
+        html += `<section><h3 class="text-lg font-semibold text-cyan-600">Projects</h3><ul>${formatList(obj.projects)}</ul></section>`;
+      if (obj.experience)
+        html += `<section><h3 class="text-lg font-semibold text-cyan-600">Experience</h3><ul>${formatList(obj.experience)}</ul></section>`;
+      if (obj.certificates)
+        html += `<section><h3 class="text-lg font-semibold text-cyan-600">Certificates</h3><ul>${formatList(obj.certificates)}</ul></section>`;
+
+      html += `</div>`;
+      previewArea.innerHTML = html;
+    }
+
+    // ✅ Live preview triggers
+    document.querySelectorAll('#resume-form input, #resume-form textarea, #resume-form select')
+      .forEach(el => el.addEventListener('input', updatePreview));
+    photoInput.addEventListener('change', updatePreview);
+    window.addEventListener('DOMContentLoaded', updatePreview);
+
+    // ✅ PDF download without reload
+    form.addEventListener('submit', function(e) {
+      const downloadChecked = document.getElementById('download-pdf').checked;
+      if (downloadChecked) {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        fetch('{{ url_for("generate") }}', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("PDF generation failed");
+          return response.blob();
+        })
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'resume.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        })
+        .catch(error => {
+          alert("PDF download failed.");
+          console.error(error);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

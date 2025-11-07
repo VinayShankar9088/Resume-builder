@@ -1,0 +1,89 @@
+<div class="space-y-8 p-6 bg-white rounded-2xl shadow-md">
+
+  <!-- Profile Section -->
+  <div class="flex items-center space-x-6 border-b pb-4">
+    {% if photo %}
+      <img src="{{ url_for('static', filename=photo) }}" 
+           class="w-28 h-28 rounded-full object-cover shadow-md border-4 border-cyan-400">
+    {% endif %}
+    <div>
+      <h1 class="text-3xl font-extrabold text-indigo-700">{{ name }}</h1>
+      <p class="text-gray-600 mt-1">
+        {{ email }} {% if phone %} • {{ phone }}{% endif %}
+      </p>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  {% if summary %}
+  <section class="border-l-4 border-indigo-400 pl-4">
+    <h3 class="text-xl font-semibold text-cyan-600 mb-2">Summary</h3>
+    <p class="text-gray-700 leading-relaxed">{{ summary }}</p>
+  </section>
+  {% endif %}
+
+  <!-- Skills -->
+  {% if skills %}
+  <section class="border-l-4 border-indigo-400 pl-4">
+    <h3 class="text-xl font-semibold text-cyan-600 mb-2">Skills</h3>
+    <ul class="list-disc list-inside text-gray-700 space-y-1">
+      {% for skill in skills %}
+        <li>{{ skill }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <!-- Education -->
+  {% if educations %}
+  <section class="border-l-4 border-indigo-400 pl-4">
+    <h3 class="text-xl font-semibold text-cyan-600 mb-2">Education</h3>
+    <ul class="list-disc list-inside text-gray-700 space-y-1">
+      {% for e in educations %}
+        <li>{{ e }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <!-- Projects -->
+  {% if projects %}
+  <section class="border-l-4 border-indigo-400 pl-4">
+    <h3 class="text-xl font-semibold text-cyan-600 mb-2">Projects</h3>
+    <ul class="list-disc list-inside text-gray-700 space-y-1">
+      {% for p in projects %}
+        <li>{{ p }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <!-- Experience -->
+  {% if experiences %}
+  <section class="border-l-4 border-indigo-400 pl-4">
+    <h3 class="text-xl font-semibold text-cyan-600 mb-2">Experience</h3>
+    <ul class="list-disc list-inside text-gray-700 space-y-1">
+      {% for ex in experiences %}
+        <li>{{ ex }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <!-- Certificates -->
+  {% if certificates %}
+  <section class="border-l-4 border-indigo-400 pl-4">
+    <h3 class="text-xl font-semibold text-cyan-600 mb-2">Certificates</h3>
+    <ul class="list-disc list-inside text-gray-700 space-y-1">
+      {% for c in certificates %}
+        <li>{{ c }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  
+    </form>
+  </div>
+
+</div>
