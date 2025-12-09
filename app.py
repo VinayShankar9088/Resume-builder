@@ -54,14 +54,22 @@ def generate():
             filename = secure_filename(photo.filename)
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             photo.save(save_path)
-            photo_filename = f'uploads/{filename}'
+            # store relative path for browser rendering
+            photo_filename = os.path.join('static', 'uploads', filename)
 
     data["photo"] = photo_filename
     data["template_choice"] = template_choice
 
     # PDF download option
     if request.form.get("download") == "pdf":
-        html = render_template(f"{template_choice}.html", **data)
+        pdf_data = data.copy()
+        if pdf_data["photo"]:
+            # absolute path for wkhtmltopdf
+            photo_path = os.path.join(BASE_DIR, pdf_data["photo"])
+            file_url = photo_path.replace("\\", "/")
+            pdf_data["photo"] = f"file:///{file_url}"
+
+        html = render_template(f"{template_choice}.html", **pdf_data)
 
         # Save HTML for debugging
         with open("debug.html", "w", encoding="utf-8") as f:
@@ -70,7 +78,7 @@ def generate():
         # PDFKit configuration
         config = pdfkit.configuration(wkhtmltopdf=r'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
         options = {
-            'enable-local-file-access': None,
+            'enable-local-file-access': '',   # must be empty string, not None
             'page-size': 'A4',
             'encoding': 'UTF-8',
             'quiet': ''
